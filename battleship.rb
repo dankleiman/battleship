@@ -3,57 +3,69 @@ require 'pry'
 ##############
 # DRAW BOARD #
 ##############
-
-
-board = []
-10.times do
-  row = []
+def new_board
+  board = []
   10.times do
-    row << "O"
+    row = []
+    10.times do
+      row << "O"
+    end
+    board << row
   end
-  board << row
+  board
 end
+
 
 ###################
 # PLACE ALL SHIPS #
 ###################
 
-ships = {"A" => [], "B" => [], "C" => [], "D" => [] }
-size = {"A" => 5, "B" => 4, "C" => 3, "D" => 2 }
+def place_ships(player, board, ships, size)
+  ships.each do |ship, position|
+    start = []
+    print "Starting position for #{player} #{ship} (row): "
+    start[0] = gets.chomp.to_i
+    print "Starting position for #{player} #{ship} (column): "
+    start[1] = gets.chomp.to_i
+    print "Orientation? (h for horizontal, v for vertical): "
+    orientation = gets.chomp.downcase
 
-ships = {"A" => []}
-size = {"A" => 5}
+    i = start[0]
+    j = start[1]
 
-ships.each do |ship, position|
-  start = []
-  print "Starting position for ship #{ship} (row): "
-  start[0] = gets.chomp.to_i
-  print "Starting position for ship #{ship} (column): "
-  start[1] = gets.chomp.to_i
-  print "Orientation? (h for horizontal, v for vertical): "
-  orientation = gets.chomp.downcase
-
-  i = start[0]
-  j = start[1]
-  if orientation == 'h'
-    while j < size[ship]
+    size[ship].times do
       board[i][j] = ship
       position << [i, j]
-      j +=1
+      if orientation == 'h'
+        j +=1
+      else
+        i +=1
+      end
     end
-  else
-     while i < size[ship]
-      board[i][j] = ship
-      position << [i, j]
-      i += 1
-    end
+    puts "Position of #{player} #{ship}: #{position}"
   end
-  puts "Position of Ship #{ship}: #{position}"
+
 end
 
-###############
-# FIRE A SHOT #
-###############
+# ships = {"Aircraft Carrier" => [], "Battleship" => [], "Cruiser" => [], "Destroyer" => [] }
+# size = {"Aircraft Carrier" => 5, "Battleship" => 4, "Cruiser" => 3, "Destroyer" => 2 }
+
+
+size = {"Aircraft Carrier" => 5}
+my_ships = {"Aircraft Carrier" => []}
+enemy_ships = {"Aircraft Carrier" => []}
+
+my_board = new_board
+enemy_board = new_board
+
+place_ships("Player 1", my_board, my_ships, size)
+place_ships("Enemy", enemy_board, enemy_ships, size)
+
+binding.pry
+
+########################################
+# FIRE A SHOTS UNTIL ALL SHIPS GO DOWN #
+########################################
 
 until ships.empty?
   shot = []
@@ -61,13 +73,12 @@ until ships.empty?
   shot[0] = gets.chomp.to_i
   print "Fire a shot (column): "
   shot[1] = gets.chomp.to_i
-  #factor in array counting vs column display?
 
   if board[shot[0]][shot[1]] == "O"
     puts "Miss!"
   else
     board[shot[0]][shot[1]] = "H"
-    puts "Hit"
+    puts "Hit!"
   end
   ships.each do |ship, position|
     hits = 0
@@ -80,7 +91,7 @@ until ships.empty?
       end
     end
     if hits == position.length
-      puts "You sunk my #{ship} Ship!"
+      puts "You sunk my #{ship}!"
       ships.delete(ship)
     end
   end
