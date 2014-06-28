@@ -40,7 +40,7 @@
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   line-height: 0;
-  font-size: 5em;
+  font-size: 2.5em;
 }
 
 .square:hover {
@@ -51,10 +51,10 @@
   border-left: none;
 }
 
-.square-x:before {
-  content: "X";
+.hit:before {
+  content: "H";
 }
 
-.square-o:before {
-  content: "O";
+.miss:before {
+  content: "M";
 }
