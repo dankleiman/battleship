@@ -45,48 +45,76 @@ def place_ships(player, board, ships, size)
   end
 end
 
-# ships = {"Aircraft Carrier" => [], "Battleship" => [], "Cruiser" => [], "Destroyer" => [] }
-# size = {"Aircraft Carrier" => 5, "Battleship" => 4, "Cruiser" => 3, "Destroyer" => 2 }
+##########
+# BATTLE #
+##########
 
-size = {"Aircraft Carrier" => 5}
-my_ships = {"Aircraft Carrier" => []}
-# enemy_ships = {"Aircraft Carrier" => []}
-
-my_board = new_board
-# enemy_board = new_board
-
-place_ships("Player 1", my_board, my_ships, size)
-# place_ships("Enemy", enemy_board, enemy_ships, size)
-
-########################################
-# FIRE A SHOTS UNTIL ALL SHIPS GO DOWN #
-########################################
-puts my_board.inspect
-until my_ships.empty?
+def fire_and_check_winner(player1, player2, player1_ships, player2_ships, player1_board, player2_board)
+  winner = false
   shot = []
-  print "Fire a shot (row): "
+  print "Fire a shot, #{player1} (row): "
   shot[0] = gets.chomp.to_i
-  print "Fire a shot (column): "
+  print "Fire a shot, #{player1} (column): "
   shot[1] = gets.chomp.to_i
-
-  if my_board[shot[0]][shot[1]] == "O"
+  if player2_board[shot[0]][shot[1]] == "O"
     puts "Miss!"
   else
-    my_board[shot[0]][shot[1]] = "H"
+    player2_board[shot[0]][shot[1]] = "H"
     puts "Hit!"
-    my_ships.each do |ship, position|
+    player2_ships.each do |ship, position|
       hits = 0
       position.each do |p|
         row = p[0]
         col = p[1]
-        if my_board[row][col] == 'H'
+        if player2_board[row][col] == 'H'
           hits += 1
         end
       end
       if hits == position.length
-        puts "You sunk my #{ship}!"
-        my_ships.delete(ship)
+        puts "You sunk #{player2} #{ship}!"
+        player2_ships.delete(ship)
+      end
+      if player2_ships.empty?
+        winner = true
       end
     end
   end
+  winner
 end
+
+##############
+# START GAME #
+##############
+
+# ships = {"Aircraft Carrier" => [], "Battleship" => [], "Cruiser" => [], "Destroyer" => [] }
+size = {"Aircraft Carrier" => 5, "Battleship" => 4, "Cruiser" => 3, "Destroyer" => 2 }
+
+my_ships = {"Aircraft Carrier" => []}
+enemy_ships = {"Destroyer" => []}
+
+my_board = new_board
+enemy_board = new_board
+
+place_ships("Player 1", my_board, my_ships, size)
+place_ships("Enemy", enemy_board, enemy_ships, size)
+
+winner = false
+
+until winner
+  puts "Your Board:"
+  puts my_board.inspect
+
+  puts "Enemy Board:"
+  puts enemy_board.inspect
+
+  if fire_and_check_winner("Player 1", "Enemy", my_ships, enemy_ships, my_board, enemy_board)
+    puts "Player 1 wins!"
+    winner = true
+  elsif fire_and_check_winner("Enemy", "Player 1", enemy_ships, my_ships, enemy_board, my_board)
+    puts "Enemy wins!"
+    winner = true
+  end
+
+end
+
+
