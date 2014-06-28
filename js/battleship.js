@@ -13,7 +13,7 @@ function placeShips(ships, size) {
     var orientation = prompt("Orientation? (h for horizontal, v for vertical):").toLowerCase();
 
     for (var j = 0; j < size; j++) {
-      $(".row:eq("+row+") > .square:eq("+col+")").addClass('ship')
+      $(".row:eq("+row+") > .square:eq("+col+")").addClass("ship")
       if (orientation === 'h'){
         col ++
       } else{

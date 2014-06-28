@@ -53,8 +53,20 @@
 
 .hit:before {
   content: "H";
+
+}
+
+.hit,
+.hit:hover {
+  background-color: green;
 }
 
 .miss:before {
   content: "M";
+
+}
+
+.miss,
+.miss:hover {
+  background-color: red;
 }
