@@ -59,7 +59,10 @@ def fire_and_check_winner(player1, player2, player1_ships, player2_ships, player
     shot[0] = gets.chomp.to_i
     print "Fire a shot, #{player1} (column): "
     shot[1] = gets.chomp.to_i
-    if player2_board[shot[0]][shot[1]] == "M" || player2_board[shot[0]][shot[1]] == "H"
+
+    if shot[0] > 9 || shot[1] > 9
+      puts "Please aim to hit the board."
+    elsif player2_board[shot[0]][shot[1]] == "M" || player2_board[shot[0]][shot[1]] == "H"
       puts "Shoot somewhere new, please!"
     else
       valid_shot = true
