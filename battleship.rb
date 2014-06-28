@@ -22,17 +22,25 @@ end
 
 def place_ships(player, board, ships, size)
   ships.each do |ship, position|
-    start = []
-    print "Starting position for #{player} #{ship} (row): "
-    start[0] = gets.chomp.to_i
-    print "Starting position for #{player} #{ship} (column): "
-    start[1] = gets.chomp.to_i
-    print "Orientation? (h for horizontal, v for vertical): "
-    orientation = gets.chomp.downcase
-
-    i = start[0]
-    j = start[1]
-
+    valid_position = false
+    until valid_position
+      start = []
+      print "Starting position for #{player} #{ship} (row): "
+      start[0] = gets.chomp.to_i
+      print "Starting position for #{player} #{ship} (column): "
+      start[1] = gets.chomp.to_i
+      print "Orientation? (h for horizontal, v for vertical): "
+      orientation = gets.chomp.downcase
+      i = start[0]
+      j = start[1]
+      if orientation == 'h' && (j + size[ship]) > 9
+        puts "Please pick a location inside the grid for this ship."
+      elsif orientation == 'v' && (i + size[ship]) > 9
+        puts "Please pick a location inside the grid for this ship."
+      else
+        valid_position = true
+      end
+    end
     size[ship].times do
       board[i][j] = ship
       position << [i, j]
@@ -42,6 +50,14 @@ def place_ships(player, board, ships, size)
         i +=1
       end
     end
+    puts
+    puts
+    puts "#{player} Board:"
+    board.each do |row|
+      puts row.inspect
+    end
+    puts
+    puts
   end
 end
 
@@ -103,31 +119,58 @@ end
 # ships = {"Aircraft Carrier" => [], "Battleship" => [], "Cruiser" => [], "Destroyer" => [] }
 size = {"Aircraft Carrier" => 5, "Battleship" => 4, "Cruiser" => 3, "Destroyer" => 2 }
 
-my_ships = {"Aircraft Carrier" => []}
-enemy_ships = {"Destroyer" => []}
+first_player_ships = {"Aircraft Carrier" => [], "Battleship" => [], "Cruiser" => [], "Destroyer" => [] }
+second_player_ships = {"Aircraft Carrier" => [], "Battleship" => [], "Cruiser" => [], "Destroyer" => [] }
 
-my_board = new_board
-enemy_board = new_board
+first_player_board = new_board
+second_player_board = new_board
 
-place_ships("Player 1", my_board, my_ships, size)
-place_ships("Enemy", enemy_board, enemy_ships, size)
+place_ships("Player 1", first_player_board, first_player_ships, size)
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+place_ships("Player 2", second_player_board, second_player_ships, size)
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
+puts
 
 winner = false
 
 until winner
-  puts "Your Board:"
-  puts my_board.inspect
-
-  puts "Enemy Board:"
-  puts enemy_board.inspect
-
-  if fire_and_check_winner("Player 1", "Enemy", my_ships, enemy_ships, my_board, enemy_board)
+  if fire_and_check_winner("Player 1", "Player 2", first_player_ships, second_player_ships, first_player_board, second_player_board)
     puts "Player 1 wins!"
     winner = true
-  elsif fire_and_check_winner("Enemy", "Player 1", enemy_ships, my_ships, enemy_board, my_board)
-    puts "Enemy wins!"
+  elsif fire_and_check_winner("Player 2", "Player 1", second_player_ships, first_player_ships, second_player_board, first_player_board)
+    puts "Player 2 wins!"
     winner = true
   end
 end
+
 
 
