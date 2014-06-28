@@ -63,16 +63,20 @@ ships.each do |ship, position|
   if orientation == 'h'
     while j < size[ship]
       board[i][j] = ship
+      position << [i, j]
       j +=1
     end
   else
      while i < size[ship]
       board[i][j] = ship
+      position << [i, j]
       i += 1
     end
   end
-  puts board.inspect
+  puts "Ships: #{ships.inspect}"
 end
+puts "Board: #{board.inspect}"
+
 
 
 ###############
