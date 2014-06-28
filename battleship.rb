@@ -52,12 +52,23 @@ end
 def fire_and_check_winner(player1, player2, player1_ships, player2_ships, player1_board, player2_board)
   winner = false
   shot = []
-  print "Fire a shot, #{player1} (row): "
-  shot[0] = gets.chomp.to_i
-  print "Fire a shot, #{player1} (column): "
-  shot[1] = gets.chomp.to_i
+  valid_shot = false
+
+  until valid_shot
+    print "Fire a shot, #{player1} (row): "
+    shot[0] = gets.chomp.to_i
+    print "Fire a shot, #{player1} (column): "
+    shot[1] = gets.chomp.to_i
+    if player2_board[shot[0]][shot[1]] == "M" || player2_board[shot[0]][shot[1]] == "H"
+      puts "Shoot somewhere new, please!"
+    else
+      valid_shot = true
+    end
+  end
+
   if player2_board[shot[0]][shot[1]] == "O"
     puts "Miss!"
+    player2_board[shot[0]][shot[1]] = "M"
   else
     player2_board[shot[0]][shot[1]] = "H"
     puts "Hit!"
@@ -114,7 +125,6 @@ until winner
     puts "Enemy wins!"
     winner = true
   end
-
 end
 
 
